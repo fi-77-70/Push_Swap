@@ -16,28 +16,35 @@ int	main(int ac, char **av)
 {
 	t_list	**stack_a;
 	t_list	**stack_b;
+	t_list	*temp;
 
+	stack_a = (t_list **)malloc(sizeof(t_list));
+	stack_b = (t_list **)malloc(sizeof(t_list));	
 	if(ac <= 2)
 	{
 		printf("Please Input a list of numbers to sort -----> ex:(-345, 0, 42, 5042, 3)");
 		return (0);
 	}
-	stack_a = (t_list **)malloc(sizeof(t_list));
-	stack_b = (t_list **)malloc(sizeof(t_list));
-	if (!stack_a)
-		return (0);
-	*stack_a = ft_newlist(av);
-	ft_swap('a', *stack_a, *stack_b);
+	*stack_b = NULL;
+	ft_newlist(av, stack_a);
+	if (!(*stack_a))
+		return (printf("Stack_A não foi criado\n"));
+	ft_swap('a', stack_a, stack_b);
 	ft_push(stack_a, stack_b);
-	while(*stack_a)
+	ft_rotate('a', stack_a, stack_b);
+	temp = *stack_a;
+	while(temp)
 	{
-		printf("Stack_A [%d]\n", (*stack_a)->number);
-		*stack_a = (*stack_a)->next;
+		printf("Stack_A [%d]\n", temp->number);
+		temp = temp->next;
 	}
-	while(*stack_b)
+	temp = *stack_b;
+	while(temp)
 	{
-		printf("Stack_B [%d]\n", (*stack_b)->number);
-		*stack_b = (*stack_b)->next;
+		printf("Stack_B [%d]\n", temp->number);
+		temp = temp->next;
 	}
+	free_all_list(stack_a);
+	free_all_list(stack_b);
 	return (0);
 }

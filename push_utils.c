@@ -12,43 +12,47 @@
 
 #include "push_swap.h"
 
-void	*free_all_list(t_list *list)
+void	*free_all_list(t_list **stack)
 {
 	t_list	*temp;
 
-	while (list)
+	while (*stack)
 	{
-		temp = list;
-		list = list->next;
+		temp = *stack;
+		*stack = (*stack)->next;
 		free(temp);
 	}
+	if (stack)
+		free (stack);
 	return (NULL);
 }
 
-t_list	*ft_newlist(char **arguments)
+void	ft_newlist(char **arguments, t_list **stack_a)
 {
-	int		i;
-	t_list	*f_list;
+	int	i;
 	t_list	*list;
 
 	i = 1;
-	f_list = (t_list *)malloc(sizeof(t_list));
-	if (!f_list)
-		return (NULL);
-	f_list->number = ft_atoi(arguments[i++]);
-	f_list->next = NULL;
-	list = f_list;
+	*stack_a = (t_list *)malloc(sizeof(t_list));
+	if (!(*stack_a))
+		return ;
+	(*stack_a)->number = ft_atoi(arguments[i++]);
+	(*stack_a)->next = NULL;
+	list = *stack_a;
 	while (arguments[i])
 	{
 		list->next = (t_list *)malloc(sizeof(t_list));
 		if (!list->next)
-			return (free_all_list(f_list));
+		{
+			free_all_list(stack_a);
+			return ;
+		}
 		list = list->next;
 		list->number = ft_atoi(arguments[i]);
 		list->next = NULL;
 		i++;
 	}
-	return (f_list);
+	return ;
 }
 
 // t_list	*ft_list_b(int ac)

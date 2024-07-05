@@ -17,18 +17,19 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-typedef struct n_list
+typedef struct t_list
 {
-	int				number;
-	struct n_list	*next;
+	int		number;
+	struct t_list	*next;
 }	t_list;
 
-t_list	*ft_newlist(char **arguments);
+void	ft_newlist(char **arguments, t_list **stack_a);
 int		ft_atoi(char *str);
-void	*free_all_list(t_list *list);
+void	*free_all_list(t_list **stack);
 // t_list	*ft_push(t_list *list_push, t_list *list_recive);
 void	ft_push(t_list **stack_from, t_list **stack_to);
 void	ft_sort(t_list list_a, t_list list_b);
-void	ft_swap(char x, t_list *list_a, t_list *list_b);
+void	ft_swap(char x, t_list **list_a, t_list **list_b);
+void	ft_rotate(char x, t_list **stack_a, t_list **stack_b);
 
 #endif
