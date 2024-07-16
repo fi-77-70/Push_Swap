@@ -6,34 +6,67 @@
 /*   By: filferna <filferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 14:22:09 by filferna          #+#    #+#             */
-/*   Updated: 2024/06/29 21:26:52 by filferna         ###   ########.fr       */
+/*   Updated: 2024/07/16 18:22:42 by filferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	ft_swap(char x, t_list **list_a, t_list **list_b)
+static void	rotate_two(t_list **stack_b)
 {
-	int	temp;
+	t_list	*first;
+	t_list	*temp;
 
-	if (x == 's' && (*list_a)->next->number && (*list_b)->next->number)
+	first = (*stack_b)->next;
+	temp = *stack_b;
+	while ((*stack_b)->next)
+		*stack_b = (*stack_b)->next;
+	(*stack_b)->next = temp;
+	*stack_b = (*stack_b)->next;
+	(*stack_b)->next = NULL;
+	*stack_b = first;
+	return ;
+}
+
+static void	reverse_two(t_list **stack_b)
+{
+	t_list	*first;
+	t_list	*temp;
+
+	first = *stack_b;
+	while ((*stack_b)->next->next)
+		*stack_b = (*stack_b)->next;
+	temp = (*stack_b)->next;
+	(*stack_b)->next = NULL;
+	*stack_b = temp;
+	(*stack_b)->next = first;
+	return ;
+}
+
+void	ft_reverse_rotate(char x, t_list **stack_a, t_list **stack_b)
+{
+	t_list	*temp;
+	t_list	*first;
+
+	write(1, "rr", 2);
+	write(1, &x, 1);
+	write(1, "\n", 1);
+	if (x == 'a' && *stack_a && (*stack_a)->next)
 	{
-		ft_swap('a', list_a, list_b);
-		ft_swap('b', list_a, list_b);
-		return ;
+		first = *stack_a;
+		while ((*stack_a)->next->next)
+			*stack_a = (*stack_a)->next;
+		temp = (*stack_a)->next;
+		(*stack_a)->next = NULL;
+		*stack_a = temp;
+		(*stack_a)->next = first;
 	}
-	else if (x == 'a' && (*list_a)->next->number)
+	else if (x == 'b' && *stack_b && (*stack_b)->next)
+		reverse_two(stack_b);
+	else if (x == 'r')
 	{
-		temp = (*list_a)->number;
-		(*list_a)->number = (*list_a)->next->number;
-		(*list_a)->next->number = temp;
-	}
-	else if(x == 'b' && (*list_b)->next->number)
-	{
-		temp = (*list_b)->number;
-		(*list_b)->number = (*list_b)->next->number;
-		*list_b = (*list_b)->next;
-		(*list_b)->number = temp;
+		ft_reverse_rotate('a', stack_a, stack_b);
+		ft_reverse_rotate('b', stack_a, stack_b);
 	}
 	return ;
 }
@@ -42,8 +75,10 @@ void	ft_rotate(char x, t_list **stack_a, t_list **stack_b)
 {
 	t_list	*temp;
 	t_list	*first;
-	
-	(void)stack_b;
+
+	write(1, "r", 1);
+	write(1, &x, 1);
+	write(1, "\n", 1);
 	if (x == 'a' && (*stack_a) && (*stack_a)->next)
 	{
 		first = (*stack_a)->next;
@@ -56,30 +91,25 @@ void	ft_rotate(char x, t_list **stack_a, t_list **stack_b)
 		*stack_a = first;
 	}
 	else if (x == 'b' && (*stack_b) && (*stack_b)->next)
-	{
-		first = (*stack_b)->next;
-		temp = *stack_b;
-		while ((*stack_b)->next)
-			*stack_b = (*stack_b)->next;
-		(*stack_b)->next = temp;
-		*stack_b = (*stack_b)->next;
-		(*stack_b)->next = NULL;
-		*stack_b = first;
-	}
-	else if(x == 'r')
+		rotate_two(stack_b);
+	else if (x == 'r')
 	{
 		ft_rotate('a', stack_a, stack_b);
 		ft_rotate('b', stack_a, stack_b);
 	}
-	return;
+	return ;
 }
 
-void	ft_push(t_list **stack_from, t_list **stack_to)
+void	ft_push(char x, t_list **stack_from, t_list **stack_to)
 {
 	t_list	*list_push;
 	t_list	*list_receive;
 	t_list	*temp;
 
+	write(1, "s", 1);
+	write(1, &x, 1);
+	if (!stack_from || !(*stack_from))
+		return ;
 	list_push = *stack_from;
 	list_receive = *stack_to;
 	temp = list_push->next;

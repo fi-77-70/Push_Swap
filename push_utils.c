@@ -6,7 +6,7 @@
 /*   By: filferna <filferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 19:12:40 by filferna          #+#    #+#             */
-/*   Updated: 2024/06/29 19:36:13 by filferna         ###   ########.fr       */
+/*   Updated: 2024/07/16 18:21:00 by filferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	*free_all_list(t_list **stack)
 
 void	ft_newlist(char **arguments, t_list **stack_a)
 {
-	int	i;
+	int		i;
 	t_list	*list;
 
 	i = 1;
@@ -55,30 +55,34 @@ void	ft_newlist(char **arguments, t_list **stack_a)
 	return ;
 }
 
-// t_list	*ft_list_b(int ac)
-// {
-// 	int		i;
-// 	t_list	*f_list;
-// 	t_list	*temp;
+void	ft_swap(char x, t_list **list_a, t_list **list_b)
+{
+	int	temp;
 
-// 	if (!ac || ac == 0)
-// 		return (NULL);
-// 	i = ac;
-// 	f_list = (t_list *)malloc(sizeof(t_list));
-// 	if (!f_list)
-// 		return (NULL);
-// 	f_list->next = NULL;
-// 	temp = f_list;
-// 	while (--i)
-// 	{
-// 		temp->next = (t_list *)malloc(sizeof(t_list));
-// 		if (!temp->next)
-// 			return (free_all_list(f_list));
-// 		temp = temp->next;
-// 		temp->next = NULL;
-// 	}
-// 	return (f_list);
-// }
+	write(1, "s", 1);
+	write(1, &x, 1);
+	write(1, "\n", 1);
+	if (x == 's' && (*list_a)->next->number && (*list_b)->next->number)
+	{
+		ft_swap('a', list_a, list_b);
+		ft_swap('b', list_a, list_b);
+		return ;
+	}
+	else if (x == 'a' && (*list_a)->next->number)
+	{
+		temp = (*list_a)->number;
+		(*list_a)->number = (*list_a)->next->number;
+		(*list_a)->next->number = temp;
+	}
+	else if (x == 'b' && (*list_b)->next->number)
+	{
+		temp = (*list_b)->number;
+		(*list_b)->number = (*list_b)->next->number;
+		*list_b = (*list_b)->next;
+		(*list_b)->number = temp;
+	}
+	return ;
+}
 
 int	ft_atoi(char *str)
 {
