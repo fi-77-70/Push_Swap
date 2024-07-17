@@ -6,7 +6,7 @@
 /*   By: filferna <filferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 19:12:40 by filferna          #+#    #+#             */
-/*   Updated: 2024/07/16 18:21:00 by filferna         ###   ########.fr       */
+/*   Updated: 2024/07/17 20:00:04 by filferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,13 @@ void	ft_swap(char x, t_list **list_a, t_list **list_b)
 {
 	int	temp;
 
-	write(1, "s", 1);
-	write(1, &x, 1);
-	write(1, "\n", 1);
 	if (x == 's' && (*list_a)->next->number && (*list_b)->next->number)
 	{
 		ft_swap('a', list_a, list_b);
 		ft_swap('b', list_a, list_b);
+		write(1, "s", 1);
+		write(1, &x, 1);
+		write(1, "\n", 1);
 		return ;
 	}
 	else if (x == 'a' && (*list_a)->next->number)

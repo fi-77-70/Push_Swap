@@ -6,7 +6,7 @@
 /*   By: filferna <filferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 14:22:09 by filferna          #+#    #+#             */
-/*   Updated: 2024/07/16 18:22:42 by filferna         ###   ########.fr       */
+/*   Updated: 2024/07/17 15:32:52 by filferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,9 @@ void	ft_push(char x, t_list **stack_from, t_list **stack_to)
 	t_list	*list_receive;
 	t_list	*temp;
 
-	write(1, "s", 1);
+	write(1, "p", 1);
 	write(1, &x, 1);
+	write(1, "\n", 1);
 	if (!stack_from || !(*stack_from))
 		return ;
 	list_push = *stack_from;
