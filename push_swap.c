@@ -6,7 +6,7 @@
 /*   By: filferna <filferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 19:04:36 by filferna          #+#    #+#             */
-/*   Updated: 2024/07/17 20:32:20 by filferna         ###   ########.fr       */
+/*   Updated: 2024/07/18 21:41:48 by filferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,57 @@ int size_of_list(t_list **stack)
 		temp = temp->next; 
 	}
 	return (result);
+}
+
+static int logic_option(int min_moves, int max_moves)
+{
+	int	temp_min;
+	int	temp_max;
+	int final_choice;
+
+	temp_min = min_moves;
+	temp_max = max_moves;
+	if (min_moves < 0)
+		temp_min = min_moves * -1;
+	if (max_moves < 0)
+		temp_max = max_moves * -1;
+	if (temp_min >= temp_max)
+		final_choice = min_moves;
+	else
+		final_choice = max_moves;
+	if (final_choice < 0)
+		return (1);
+	else
+		return (2); 
+}
+
+static int best_option(t_list **stack_a, int *module,  int min, int max)
+{
+	t_list	*temp;
+	int		min_moves;
+	int		max_moves;
+
+	if (!(*stack_a))
+		return (0);
+	if (size_of_list(stack_a) <= 1)
+		return (0);
+	min_moves = 0;
+	max_moves = 0;
+	temp = *stack_a;
+	while (temp && (temp->number % *module) != min)
+	{
+		min_moves += 1;
+		temp = temp->next;
+	}
+	temp = *stack_a;
+	while (temp && (temp->number % *module) != max)
+	{
+		max_moves += 1;
+		temp = temp->next;
+	}
+	min_moves = min_moves - (size_of_list(stack_a) / 2);
+	max_moves = max_moves - (size_of_list(stack_a) / 2);
+	return (logic_option(min_moves, max_moves));
 }
 int	ft_sorted(t_list **stack_a)
 {
@@ -48,7 +99,7 @@ int	ft_sorted(t_list **stack_a)
 		temp = temp->next;
 	begin = temp;
 	size = size_of_list(stack_a);
-	while (--size)
+	while (size--)
 	{
 		if (!begin->next)
 		{
@@ -64,18 +115,32 @@ int	ft_sorted(t_list **stack_a)
 	// printf("ORDENADOOOOOOOOOO");
 	return (1);
 }
+int	get_minimum_digit(t_list **stack, int *module)
+{
+	t_list	*temp;
+	int		minimum;
 
+	minimum = 2147483647;
+	temp = *stack;
+	while (temp)
+	{
+		if((temp->number % *module) < minimum)
+			minimum = temp->number % *module;
+		temp = temp->next;
+	}
+	return (minimum);
+}
 void	ft_handle_b(t_list **stack_a, t_list **stack_b, int *module, int *number_of_moves)
 {
 	int 	max;
 	int		min;
-	t_list	*temp;
+	int		best;
 
-	temp = *stack_b;
 	while (*stack_b)
 	{
 		min = get_maximum_digit(stack_b, module);
 		max = get_maximum_digit(stack_b, module);
+		best = best_option(stack_b, module, min, max);
 		// printf ("min ------> [%d]\n", min);
 		// printf ("conta ----> [%d]\n", ((*stack_b)->number % *module));
 		// printf("stack_b ---> [%d]\n", (*stack_b)->number);
@@ -85,7 +150,7 @@ void	ft_handle_b(t_list **stack_a, t_list **stack_b, int *module, int *number_of
 			ft_push('a', stack_b, stack_a);
 			*number_of_moves += 1;
 		}
-		else if((((*stack_b)->number % *module) == min) && *stack_b)
+		else if((((*stack_b)->number % *module) == max) && *stack_b)
 		{
 			ft_push('a', stack_a, stack_b);
 			ft_rotate('a', stack_a, stack_b);
@@ -93,7 +158,10 @@ void	ft_handle_b(t_list **stack_a, t_list **stack_b, int *module, int *number_of
 		}
 		else
 		{
-			ft_rotate('b', stack_a, stack_b);
+			if (best == 1)
+				ft_rotate('b', stack_a, stack_b);
+			else
+				ft_reverse_rotate('b', stack_a, stack_b);
 			*number_of_moves += 1;
 		}
 	}
@@ -117,22 +185,8 @@ int	get_maximum_digit(t_list **stack, int *module)
 	return (minimum);
 }
 
-int	get_minimum_digit(t_list **stack, int *module)
-{
-	t_list	*temp;
-	int		minimum;
 
-	minimum = 2147483647;
-	temp = *stack;
-	while (temp)
-	{
-		if((temp->number % *module) < minimum)
-			minimum = temp->number % *module;
-		temp = temp->next;
-	}
-	return (minimum);
-}
-
+/*
 void	ft_sort(t_list **stack_a, t_list **stack_b, int *module, int *number_of_moves)
 {
 	int	min;
@@ -177,6 +231,65 @@ void	ft_sort(t_list **stack_a, t_list **stack_b, int *module, int *number_of_mov
 		ft_sort(stack_a, stack_b, module, number_of_moves);
 	return ;
 }
+*/
+
+void	ft_sort(t_list **stack_a, t_list **stack_b, int *module, int *number_of_moves)
+{
+
+	if (!*stack_a)
+	{
+		*module = *module *10;
+		ft_handle_b(stack_a, stack_b, module, number_of_moves);
+	}
+	if (ft_sorted(stack_a))
+		return ;
+	
+}
+
+/*
+void	ft_sort(t_list **stack_a, t_list **stack_b, int *module, int *number_of_moves)
+{
+	int	max;
+	int	min;
+	int	best;
+
+	if (!*stack_a)
+	{
+		*module = *module *10;
+		ft_handle_b(stack_a, stack_b, module, number_of_moves);
+	}
+	if (ft_sorted(stack_a))
+		return ;
+	while (*stack_a)
+	{
+		min = get_minimum_digit(stack_a, module);
+		max = get_minimum_digit(stack_a, module);
+		best = best_option(stack_a, module, min, max);
+		if((((*stack_a)->number % *module) == min) && *stack_a)
+		{
+			ft_push('b', stack_a, stack_b);
+			*number_of_moves += 1;
+		}
+		else if((((*stack_a)->number % *module) == min) && *stack_a)
+		{
+			ft_push('b', stack_a, stack_b);
+			ft_rotate('b', stack_a, stack_b);
+			*number_of_moves += 1;
+		}
+		else
+		{
+			if (best == 1)
+				ft_rotate('a', stack_a, stack_b);
+			else
+				ft_reverse_rotate('a', stack_a, stack_b);
+			*number_of_moves += 1;
+		}
+	}
+	if(!ft_sorted(stack_a) || *stack_b)
+		ft_sort(stack_a, stack_b, module, number_of_moves);
+	return ;
+}
+*/
 
 int	main(int ac, char **av)
 {
@@ -203,7 +316,15 @@ int	main(int ac, char **av)
 	// temp = *stack_a;
 	// while (temp)
 	// {
-	// 	printf("%d\n", temp->number);
+	// 	printf("stack_A --- > [%d]\n", temp->number);
+	// 	printf("digits ---- > [%d]\n", temp->number_of_digits);
+	// 	temp = temp->next;
+	// }
+	// temp = *stack_b;
+	// 	while (temp)
+	// {
+	// 	printf("stack_a --- > [%d]\n", temp->number);
+	// 	printf("digitsB---- > [%d]\n", temp->number_of_digits);
 	// 	temp = temp->next;
 	// }
 	// printf("\nNumber of moves --> [%d]\n", number_of_moves);

@@ -6,11 +6,28 @@
 /*   By: filferna <filferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 19:12:40 by filferna          #+#    #+#             */
-/*   Updated: 2024/07/17 20:00:04 by filferna         ###   ########.fr       */
+/*   Updated: 2024/07/18 21:41:28 by filferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+static int ft_number_of_digits(int number)
+{
+	int	digits;
+	int	sign;
+
+	sign = 1;
+	digits = 1;
+	if(number < 0)
+		sign = -1;
+	while (number / 10)
+	{
+		digits += 1;
+		number = number /10;
+	}
+	return (digits * sign);
+}
 
 void	*free_all_list(t_list **stack)
 {
@@ -36,7 +53,8 @@ void	ft_newlist(char **arguments, t_list **stack_a)
 	*stack_a = (t_list *)malloc(sizeof(t_list));
 	if (!(*stack_a))
 		return ;
-	(*stack_a)->number = ft_atoi(arguments[i++]);
+	(*stack_a)->number = ft_atoi(arguments[i]);
+	(*stack_a)->number_of_digits = ft_number_of_digits(ft_atoi(arguments[i++]));
 	(*stack_a)->next = NULL;
 	list = *stack_a;
 	while (arguments[i])
@@ -49,6 +67,7 @@ void	ft_newlist(char **arguments, t_list **stack_a)
 		}
 		list = list->next;
 		list->number = ft_atoi(arguments[i]);
+		list->number_of_digits = ft_number_of_digits(ft_atoi(arguments[i]));
 		list->next = NULL;
 		i++;
 	}
