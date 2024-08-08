@@ -6,32 +6,15 @@
 /*   By: filferna <filferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 19:12:40 by filferna          #+#    #+#             */
-/*   Updated: 2024/07/18 21:41:28 by filferna         ###   ########.fr       */
+/*   Updated: 2024/08/05 14:11:42 by filferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static int ft_number_of_digits(int number)
+void	*free_all_list(node **stack)
 {
-	int	digits;
-	int	sign;
-
-	sign = 1;
-	digits = 1;
-	if(number < 0)
-		sign = -1;
-	while (number / 10)
-	{
-		digits += 1;
-		number = number /10;
-	}
-	return (digits * sign);
-}
-
-void	*free_all_list(t_list **stack)
-{
-	t_list	*temp;
+	node	*temp;
 
 	while (*stack)
 	{
@@ -44,56 +27,51 @@ void	*free_all_list(t_list **stack)
 	return (NULL);
 }
 
-void	ft_newlist(char **arguments, t_list **stack_a)
+void	ft_newlist(char **arguments, node **stack_a)
 {
 	int		i;
-	t_list	*list;
+	node	*list;
 
-	i = 1;
-	*stack_a = (t_list *)malloc(sizeof(t_list));
+	i = 0;
+	*stack_a = (node *)malloc(sizeof(node));
 	if (!(*stack_a))
 		return ;
-	(*stack_a)->number = ft_atoi(arguments[i]);
-	(*stack_a)->number_of_digits = ft_number_of_digits(ft_atoi(arguments[i++]));
-	(*stack_a)->next = NULL;
+	(*stack_a)->number = ft_atol(arguments[i++]);
+	(*stack_a)->index = -1;
 	list = *stack_a;
 	while (arguments[i])
 	{
-		list->next = (t_list *)malloc(sizeof(t_list));
+		list->next = (node *)malloc(sizeof(node));
 		if (!list->next)
 		{
 			free_all_list(stack_a);
 			return ;
 		}
 		list = list->next;
-		list->number = ft_atoi(arguments[i]);
-		list->number_of_digits = ft_number_of_digits(ft_atoi(arguments[i]));
+		list->number = ft_atol(arguments[i]);
+		list->index = -1;
 		list->next = NULL;
 		i++;
 	}
 	return ;
 }
 
-void	ft_swap(char x, t_list **list_a, t_list **list_b)
+void	ft_swap(char x, node **list_a, node **list_b)
 {
-	int	temp;
+	int				temp;
+	unsigned int	t_index;
 
-	if (x == 's' && (*list_a)->next->number && (*list_b)->next->number)
+	ft_printf("s%c\n", x); 
+	if ((x == 'a' || x == 's') && size_of_list(list_a) >=2)
 	{
-		ft_swap('a', list_a, list_b);
-		ft_swap('b', list_a, list_b);
-		write(1, "s", 1);
-		write(1, &x, 1);
-		write(1, "\n", 1);
-		return ;
-	}
-	else if (x == 'a' && (*list_a)->next->number)
-	{
+		t_index = (*list_a)->index;
 		temp = (*list_a)->number;
 		(*list_a)->number = (*list_a)->next->number;
+		(*list_a)->index = (*list_a)->next->index;
 		(*list_a)->next->number = temp;
+		(*list_a)->next->index = t_index;
 	}
-	else if (x == 'b' && (*list_b)->next->number)
+	if ((x == 'b' || x == 's') && size_of_list(list_b) >= 2)
 	{
 		temp = (*list_b)->number;
 		(*list_b)->number = (*list_b)->next->number;
@@ -103,25 +81,70 @@ void	ft_swap(char x, t_list **list_a, t_list **list_b)
 	return ;
 }
 
-int	ft_atoi(char *str)
+void	ft_index(node **stack_a)
 {
-	long	result;
-	int		sign;
-	int		i;
+	node	*temp;
+	int		min;
+	int		max;
 
-	result = 0;
-	i = 0;
-	sign = 1;
-	while (!(str[i] >= '0' && str[i] <= '9'))
+	temp = *stack_a;
+	min = temp->number;
+	max = temp->number;
+	while(temp)
 	{
-		if (str[i] == '-')
-			sign = sign * -1;
-		i++;
+		if (min > temp->number)
+			min = temp->number;
+		if (max < temp->number)
+			max = temp->number;
+		temp = temp->next;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	temp = *stack_a;
+	while (temp->number != min)
+		temp = temp->next;
+	temp->index = 0;
+	ft_sort_index(stack_a, 1);
+}
+
+void	ft_sort_index(node **stack, unsigned int index)
+{
+	int		min;
+	node	*temp;
+
+	temp = *stack;
+	while (temp->index != -1 && temp->next)
+		temp = temp->next;
+	if (temp->index != -1)
+		return ;
+	min = temp->number;
+	temp = *stack;
+	while (temp)
 	{
-		result = result * 10 + (str[i] - 48);
-		i++;
+		if(temp->number < min && temp->index == -1)
+			min = temp->number;
+		temp = temp->next;
 	}
-	return (result * sign);
+	temp = *stack;
+	while (temp->number != min)
+		temp = temp->next;
+	temp->index = index;
+	ft_sort_index(stack, ++index);
+}
+int	ft_max_bits(node **stack)
+{
+	node	*temp;
+	int		max;
+	int		bits;
+
+	temp = *stack;
+	max = temp->index;
+	bits = 0;
+	while (temp)
+	{
+		if (temp->index > max)
+			max = temp->index;
+		temp = temp->next;
+	}
+	while ((max >> bits) != 0)
+		bits++;
+	return (bits);
 }

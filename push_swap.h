@@ -6,7 +6,7 @@
 /*   By: filferna <filferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 19:05:07 by filferna          #+#    #+#             */
-/*   Updated: 2024/07/18 21:29:10 by filferna         ###   ########.fr       */
+/*   Updated: 2024/08/05 14:10:15 by filferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,41 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include "./libft/libft.h"
+# include "./ft_printf/ft_printf.h"
 
-typedef struct t_list
+# define MAX_INT 2147483647
+# define MIN_INT -2147483648
+
+typedef struct node
 {
-	int				number;
-	int				number_of_digits;
-	struct t_list	*next;
-}	t_list;
-void	ft_newlist(char **arguments, t_list **stack_a);
-int		ft_atoi(char *str);
-void	*free_all_list(t_list **stack);
-void	ft_reverse_rotate(char x, t_list **stack_a, t_list **stack_b);
-void	ft_push(char x, t_list **stack_from, t_list **stack_to);
-void	ft_sort(t_list **stack_a, t_list **stack_b, int *module, int *number_of_moves);
-void	ft_swap(char x, t_list **list_a, t_list **list_b);
-void	ft_rotate(char x, t_list **stack_a, t_list **stack_b);
-int		get_minimun_digit(t_list **stack, int *module);
-void	ft_handle_b(t_list **stack_a, t_list **stack_b, int *module, int *number_of_moves);
-int		ft_sorted(t_list **stack_a);
-int		get_maximum_digit(t_list **stack, int *module);
+	long			number;
+	int				index;
+	struct node	*next;
+}	node;
+void	ft_newlist(char **arguments, node **stack_a);
+void	*free_all_list(node **stack);
+void	ft_reverse_rotate(char x, node **stack_a, node **stack_b);
+void	ft_push(char x, node **stack_from, node **stack_to);
+void	ft_sort(node **stack_a, node **stack_b);
+void	ft_swap(char x, node **list_a, node **list_b);
+void	ft_rotate(char x, node **stack_a, node **stack_b);
+int		ft_sorted(node **stack_a);
+int 	size_of_list(node **stack);
+int		ft_max_bits(node **stack);
+void	ft_sort_index(node **stack, unsigned int index);
+void	ft_index(node **stack_a);
+int		ft_atol(const char *str);
+int		verify(char **args);
+int		int_size(node **stack);
+void	sort_3(node **stack_a, node **stack_b);
+int		get_min(node **stack);
+void	small(node **stack_a, node **stack_b);
+void	sort_2(node **stack_a, node **stack_b);
+void	sort_3(node **stack_a, node **stack_b);
+void	sort_4(node **stack_a, node **stack_b);
+void	sort_5(node **stack_a, node **stack_b);
+void	ft_clean_matrix(char **matrix);
+
 
 #endif
