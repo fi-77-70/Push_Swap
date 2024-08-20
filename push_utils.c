@@ -6,15 +6,15 @@
 /*   By: filferna <filferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 19:12:40 by filferna          #+#    #+#             */
-/*   Updated: 2024/08/05 14:11:42 by filferna         ###   ########.fr       */
+/*   Updated: 2024/08/19 14:10:21 by filferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	*free_all_list(node **stack)
+void	*free_all_list(t_node **stack)
 {
-	node	*temp;
+	t_node	*temp;
 
 	while (*stack)
 	{
@@ -27,13 +27,13 @@ void	*free_all_list(node **stack)
 	return (NULL);
 }
 
-void	ft_newlist(char **arguments, node **stack_a)
+void	ft_newlist(char **arguments, t_node **stack_a)
 {
 	int		i;
-	node	*list;
+	t_node	*list;
 
 	i = 0;
-	*stack_a = (node *)malloc(sizeof(node));
+	*stack_a = (t_node *)malloc(sizeof(t_node));
 	if (!(*stack_a))
 		return ;
 	(*stack_a)->number = ft_atol(arguments[i++]);
@@ -41,7 +41,7 @@ void	ft_newlist(char **arguments, node **stack_a)
 	list = *stack_a;
 	while (arguments[i])
 	{
-		list->next = (node *)malloc(sizeof(node));
+		list->next = (t_node *)malloc(sizeof(t_node));
 		if (!list->next)
 		{
 			free_all_list(stack_a);
@@ -56,13 +56,13 @@ void	ft_newlist(char **arguments, node **stack_a)
 	return ;
 }
 
-void	ft_swap(char x, node **list_a, node **list_b)
+void	ft_swap(char x, t_node **list_a, t_node **list_b)
 {
 	int				temp;
 	unsigned int	t_index;
 
-	ft_printf("s%c\n", x); 
-	if ((x == 'a' || x == 's') && size_of_list(list_a) >=2)
+	ft_printf("s%c\n", x);
+	if ((x == 'a' || x == 's') && size_of_list(list_a) >= 2)
 	{
 		t_index = (*list_a)->index;
 		temp = (*list_a)->number;
@@ -81,16 +81,16 @@ void	ft_swap(char x, node **list_a, node **list_b)
 	return ;
 }
 
-void	ft_index(node **stack_a)
+void	ft_index(t_node **stack_a)
 {
-	node	*temp;
+	t_node	*temp;
 	int		min;
 	int		max;
 
 	temp = *stack_a;
 	min = temp->number;
 	max = temp->number;
-	while(temp)
+	while (temp)
 	{
 		if (min > temp->number)
 			min = temp->number;
@@ -105,10 +105,10 @@ void	ft_index(node **stack_a)
 	ft_sort_index(stack_a, 1);
 }
 
-void	ft_sort_index(node **stack, unsigned int index)
+void	ft_sort_index(t_node **stack, unsigned int index)
 {
 	int		min;
-	node	*temp;
+	t_node	*temp;
 
 	temp = *stack;
 	while (temp->index != -1 && temp->next)
@@ -119,7 +119,7 @@ void	ft_sort_index(node **stack, unsigned int index)
 	temp = *stack;
 	while (temp)
 	{
-		if(temp->number < min && temp->index == -1)
+		if (temp->number < min && temp->index == -1)
 			min = temp->number;
 		temp = temp->next;
 	}
@@ -128,23 +128,4 @@ void	ft_sort_index(node **stack, unsigned int index)
 		temp = temp->next;
 	temp->index = index;
 	ft_sort_index(stack, ++index);
-}
-int	ft_max_bits(node **stack)
-{
-	node	*temp;
-	int		max;
-	int		bits;
-
-	temp = *stack;
-	max = temp->index;
-	bits = 0;
-	while (temp)
-	{
-		if (temp->index > max)
-			max = temp->index;
-		temp = temp->next;
-	}
-	while ((max >> bits) != 0)
-		bits++;
-	return (bits);
 }

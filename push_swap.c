@@ -6,16 +6,16 @@
 /*   By: filferna <filferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 19:04:36 by filferna          #+#    #+#             */
-/*   Updated: 2024/08/08 17:14:21 by filferna         ###   ########.fr       */
+/*   Updated: 2024/08/19 14:06:09 by filferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int size_of_list(node **stack)
+int	size_of_list(t_node **stack)
 {
-	int result;
-	node *temp;
+	int		result;
+	t_node	*temp;
 
 	if (!*stack)
 		return (0);
@@ -24,19 +24,19 @@ int size_of_list(node **stack)
 	while (temp->next)
 	{
 		result += 1;
-		temp = temp->next; 
+		temp = temp->next;
 	}
 	return (result);
 }
 
-int	ft_sorted(node **stack_a)
+int	ft_sorted(t_node **stack_a)
 {
-	node	*temp;
+	t_node	*temp;
 
 	temp = *stack_a;
 	while (temp->next)
 	{
-		if(temp->number > temp->next->number)
+		if (temp->number > temp->next->number)
 			return (0);
 		else
 			temp = temp->next;
@@ -44,13 +44,13 @@ int	ft_sorted(node **stack_a)
 	return (1);
 }
 
-void	ft_sort(node **stack_a, node **stack_b)
+void	ft_sort(t_node **stack_a, t_node **stack_b)
 {
-	int	max_bits;
-	int	bits;
-	int	stack_size;
-	int	j;
-	node	*temp;
+	int		max_bits;
+	int		bits;
+	int		stack_size;
+	int		j;
+	t_node	*temp;
 
 	bits = -1;
 	j = 0;
@@ -72,13 +72,14 @@ void	ft_sort(node **stack_a, node **stack_b)
 			ft_push('a', stack_b, stack_a);
 	}
 }
+
 int	verify(char **args)
 {
 	int	i;
 	int	j;
 
-	j = 0;
-	while (args[j])
+	j = -1;
+	while (args[++j])
 	{
 		i = 0;
 		while (args[j][i])
@@ -87,21 +88,20 @@ int	verify(char **args)
 				i++;
 			if (args[j][i] == 0 || !ft_isdigit(args[j][i]))
 				return (ft_printf("ERROR\n"));
-			else if (i > 11)
+			if (i > 11)
 				return (ft_printf("ERROR\n"));
 			i++;
 		}
-		j++;
-		if (j == 0)
-			return (1);
 	}
+	if (j < 2)
+		return (1);
 	return (0);
 }
 
 int	main(int ac, char **av)
 {
-	node	**stack_a;
-	node	**stack_b;
+	t_node	**stack_a;
+	t_node	**stack_b;
 	char	**args;
 
 	if (ac < 2)
@@ -111,17 +111,17 @@ int	main(int ac, char **av)
 	else
 		args = ++av;
 	if (verify(args))
-		return (0);
-	stack_a = (node **)malloc(sizeof(node));
-	stack_b = (node **)malloc(sizeof(node));
+		return (ft_clean_matrix(args, ac));
+	stack_a = (t_node **)malloc(sizeof(t_node));
+	stack_b = (t_node **)malloc(sizeof(t_node));
 	*stack_b = NULL;
 	ft_newlist(args, stack_a);
+	if (ac == 2)
+		ft_clean_matrix(args, ac);
 	if (size_of_list(stack_a) > 5 && !int_size(stack_a))
 		ft_sort(stack_a, stack_b);
 	else if (!int_size(stack_a) && size_of_list(stack_a) <= 5)
 		small(stack_a, stack_b);
-	if (ac == 2)
-		ft_clean_matrix(args);
 	free_all_list(stack_a);
 	free_all_list(stack_b);
 	return (0);

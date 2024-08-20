@@ -6,16 +6,16 @@
 /*   By: filferna <filferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 14:22:09 by filferna          #+#    #+#             */
-/*   Updated: 2024/08/02 14:29:45 by filferna         ###   ########.fr       */
+/*   Updated: 2024/08/19 14:06:16 by filferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void	rotate_two(node **stack_b)
+static void	rotate_two(t_node **stack_b)
 {
-	node	*first;
-	node	*temp;
+	t_node	*first;
+	t_node	*temp;
 
 	first = (*stack_b)->next;
 	temp = *stack_b;
@@ -28,10 +28,10 @@ static void	rotate_two(node **stack_b)
 	return ;
 }
 
-static void	reverse_two(node **stack_b)
+static void	reverse_two(t_node **stack_b)
 {
-	node	*first;
-	node	*temp;
+	t_node	*first;
+	t_node	*temp;
 
 	first = *stack_b;
 	while ((*stack_b)->next->next)
@@ -43,10 +43,10 @@ static void	reverse_two(node **stack_b)
 	return ;
 }
 
-void	ft_reverse_rotate(char x, node **stack_a, node **stack_b)
+void	ft_reverse_rotate(char x, t_node **stack_a, t_node **stack_b)
 {
-	node	*temp;
-	node	*first;
+	t_node	*temp;
+	t_node	*first;
 
 	ft_printf("rr%c\n", x);
 	if ((x == 'a' || x == 'r') && *stack_a && (*stack_a)->next)
@@ -64,10 +64,10 @@ void	ft_reverse_rotate(char x, node **stack_a, node **stack_b)
 	return ;
 }
 
-void	ft_rotate(char x, node **stack_a, node **stack_b)
+void	ft_rotate(char x, t_node **stack_a, t_node **stack_b)
 {
-	node	*temp;
-	node	*first;
+	t_node	*temp;
+	t_node	*first;
 
 	ft_printf("r%c\n", x);
 	if ((x == 'a' || x == 'r') && (*stack_a) && (*stack_a)->next)
@@ -86,11 +86,11 @@ void	ft_rotate(char x, node **stack_a, node **stack_b)
 	return ;
 }
 
-void	ft_push(char x, node **stack_from, node **stack_to)
+void	ft_push(char x, t_node **stack_from, t_node **stack_to)
 {
-	node	*list_push;
-	node	*list_receive;
-	node	*temp;
+	t_node	*list_push;
+	t_node	*list_receive;
+	t_node	*temp;
 
 	if (!stack_from || !(*stack_from))
 		return ;

@@ -6,13 +6,13 @@
 /*   By: filferna <filferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 14:11:18 by filferna          #+#    #+#             */
-/*   Updated: 2024/08/05 18:35:40 by filferna         ###   ########.fr       */
+/*   Updated: 2024/08/19 14:10:06 by filferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	ft_atol(const char *str)
+long	ft_atol(const char *str)
 {
 	long	result;
 	int		sign;
@@ -35,15 +35,15 @@ int	ft_atol(const char *str)
 	return (result * sign);
 }
 
-int	int_size(node **stack)
+int	int_size(t_node **stack)
 {
-	node	*temp;
-	node	*dup;
+	t_node	*temp;
+	t_node	*dup;
 
 	temp = *stack;
 	while (temp)
 	{
-		if (temp->number < MIN_INT || temp->number > MAX_INT)
+		if (temp->number < MIN_INT || temp->number > 2147483647)
 			return (ft_printf("ERROR\n"));
 		temp = temp->next;
 	}
@@ -62,10 +62,11 @@ int	int_size(node **stack)
 	}
 	return (0);
 }
-int	get_min(node **stack)
+
+int	get_min(t_node **stack)
 {
-	node 	*temp;
-	int		min;
+	t_node		*temp;
+	int			min;
 
 	temp = *stack;
 	min = temp->number;
@@ -78,10 +79,12 @@ int	get_min(node **stack)
 	return (min);
 }
 
-void	ft_clean_matrix(char **matrix)
+int	ft_clean_matrix(char **matrix, int ac)
 {
 	int	i;
 
+	if (ac > 2)
+		return (0);
 	i = 0;
 	while (matrix[i])
 	{
@@ -89,5 +92,25 @@ void	ft_clean_matrix(char **matrix)
 		i++;
 	}
 	free(matrix);
-	return ;
+	return (0);
+}
+
+int	ft_max_bits(t_node **stack)
+{
+	t_node	*temp;
+	int		max;
+	int		bits;
+
+	temp = *stack;
+	max = temp->index;
+	bits = 0;
+	while (temp)
+	{
+		if (temp->index > max)
+			max = temp->index;
+		temp = temp->next;
+	}
+	while ((max >> bits) != 0)
+		bits++;
+	return (bits);
 }
