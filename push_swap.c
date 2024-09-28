@@ -6,7 +6,7 @@
 /*   By: filferna <filferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 19:04:36 by filferna          #+#    #+#             */
-/*   Updated: 2024/08/19 14:06:09 by filferna         ###   ########.fr       */
+/*   Updated: 2024/09/28 12:02:45 by filferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,9 +118,9 @@ int	main(int ac, char **av)
 	ft_newlist(args, stack_a);
 	if (ac == 2)
 		ft_clean_matrix(args, ac);
-	if (size_of_list(stack_a) > 5 && !int_size(stack_a))
+	if (size_of_list(stack_a) >= 5 && !int_size(stack_a))
 		ft_sort(stack_a, stack_b);
-	else if (!int_size(stack_a) && size_of_list(stack_a) <= 5)
+	else if (!int_size(stack_a) && size_of_list(stack_a) < 5)
 		small(stack_a, stack_b);
 	free_all_list(stack_a);
 	free_all_list(stack_b);
